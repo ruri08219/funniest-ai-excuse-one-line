@@ -12,11 +12,20 @@ ENTRY = (
     "to predict when I'd finish \u2014 and it predicted yesterday."
 )
 
+ENTRY_MIN_CHARS = 1
+ENTRY_MAX_CHARS = 200
+
 OUTPUT_PATH = Path("/output/entry.txt")
 
 
 def main() -> None:
-    assert 1 <= len(ENTRY) <= 200, f"entry must be 1-200 chars, got {len(ENTRY)}"
+    assert ENTRY_MIN_CHARS <= len(ENTRY) <= ENTRY_MAX_CHARS, (
+        f"entry must be {ENTRY_MIN_CHARS}-{ENTRY_MAX_CHARS} chars, "
+        f"got {len(ENTRY)}"
+    )
+    assert "\n" not in ENTRY and ENTRY == ENTRY.strip(), (
+        "entry must be a single line with no leading/trailing whitespace"
+    )
     OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     OUTPUT_PATH.write_text(ENTRY, encoding="utf-8")
     round_trip = OUTPUT_PATH.read_text(encoding="utf-8")
